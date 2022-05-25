@@ -1,3 +1,4 @@
+require('dotenv').config({path : '.env'});
 const {ApolloServer} = require('apollo-server');
 
 const typeDefs = require('./database/schema');

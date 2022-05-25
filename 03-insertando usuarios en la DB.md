@@ -6,9 +6,9 @@
 2. Busco si el email está regisrado previamente: `const existeUsuario = await Usuario.findOne({email});`
 3. En el caso que esté registrado lanzo un error: `if(existeUsuario){throw new Error('El usuario ya está registrado')};`
 4. Una vez instalada la dependencia para hashear la constraseña `npm i bcryptjs` requiero dicho módulo: `const bcrcyptjs = require('bcryptjs');` para hashear la contraseña, antes de guardar en la base de datos: `input.password = await bcrcyptjs.hash(password, 10);`
-4. En un try...catch, creo una nueva instancia del modelo _Usuario_, el cual recibe por parámetro el _input_
-5. Salvo los cambios utilizanod el método _save()_ de **mongoose**.
-6. Retorno el usuario el cual se ajusta al type declarado en el _schema_, exponiendo solo los campos que allí de definen.
+5. En un try...catch, creo una nueva instancia del modelo _Usuario_, el cual recibe por parámetro el _input_
+6. Salvo los cambios utilizanod el método _save()_ de **mongoose**.
+7. Retorno el usuario el cual se ajusta al type declarado en el _schema_, exponiendo solo los campos que allí de definen.
 
 ```
     Mutation : {
@@ -36,7 +36,7 @@
     }
 ```
 
-7. Ahora en el **Mutation**, le decimos que retorne un _Usuario_ basado en type _Usuario_ que hemos definido anteriormente.
+8. Ahora en el **Mutation**, le decimos que retorne un _Usuario_ basado en type _Usuario_ que hemos definido anteriormente.
 
 ```
 type Mutation {

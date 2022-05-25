@@ -1,10 +1,25 @@
 const bcrcyptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
+
+const crearToken = (usuario,secreta,expiresIn) => {
+    
+    const {id,email,nombre,apellido} = usuario;
+
+    return jwt.sign({id,email,nombre,apellido},secreta,{expiresIn})
+
+}
 
 const resolvers = {
 
     Query : {
-        mensajeDePrueba : () => "test"
+        obtenerUsuario : async(_,{token}) => {
+
+            const usuarioId = await jwt.verify(token, process.env.JWT_SECRET);
+
+            return usuarioId
+
+        }
     },
 
     Mutation : {
@@ -28,6 +43,28 @@ const resolvers = {
             } catch (error) {
                 console.log(error)
             }
+        },
+
+        autenticarUsuario : async (_,{input}) => {
+            
+            const {email, password} = input;
+
+            const usuario = await Usuario.findOne({email});
+            
+            if(!usuario) {
+                throw new Error('El usuario no está registrado')
+            };
+
+            const passwordCorrecto = await bcrcyptjs.compare(password,usuario.password);
+
+            if(!passwordCorrecto) {
+                throw new Error('La contraseña no es correcta')
+            };
+
+            return {
+                token : crearToken(usuario,process.env.JWT_SECRET,'24h')
+            }
+
         }
     }
 }

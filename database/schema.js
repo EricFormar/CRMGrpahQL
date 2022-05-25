@@ -10,6 +10,10 @@ type Usuario {
     creado : String
 }
 
+type Token {
+    token : String!
+}
+
 input UsuarioInput {
     nombre : String!
     apellido : String!
@@ -17,12 +21,18 @@ input UsuarioInput {
     password : String!
 }
 
+input AutenticarInput {
+    email : String!
+    password : String!
+}
+
 type Query {
-    mensajeDePrueba : String
+    obtenerUsuario(token : String!) : Usuario
 }
 
 type Mutation {
     nuevoUsuario(input : UsuarioInput) : Usuario
+    autenticarUsuario(input : AutenticarInput) : Token
 }
 
 `
