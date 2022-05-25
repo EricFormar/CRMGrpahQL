@@ -12,7 +12,7 @@
 2. Instalar la dependencia *dotenv* `npm i dotenv`
 3. Crear el archivo `.env` con las siguientes variables de entorno:
 ~~~
-DB_MONGO=mongodb+srv://root:root@cluster0.5srdy.mongodb.net/CRMGraphQL
+DB_MONGO=mongodb+srv://<usuario>:<contraseña>@cluster0.5srdy.mongodb.net/CRMGraphQL
 ~~~
 3. Crear un carpeta `config` y dentro de ella el archivo `db.js` con el siguiente código:
 ~~~
