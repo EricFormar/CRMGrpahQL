@@ -2,6 +2,8 @@ const {gql} =require('apollo-server');
 
 const typeDefs = gql`
 
+# types
+
 type Usuario {
     id: ID
     nombre : String
@@ -13,6 +15,23 @@ type Usuario {
 type Token {
     token : String!
 }
+
+type Producto {
+    id: ID
+    nombre : String
+    existencia : Int
+    precio : Float
+    creado : String
+}
+
+# queries
+
+type Query {
+    obtenerUsuario(token : String!) : Usuario
+    obtenerProductos : [Producto]
+}
+
+# inputs
 
 input UsuarioInput {
     nombre : String!
@@ -26,25 +45,13 @@ input AutenticarInput {
     password : String!
 }
 
-type Query {
-    obtenerUsuario(token : String!) : Usuario
-}
-
-#Productos
-
-type Producto {
-    id: ID
-    nombre : String
-    existencia : Int
-    precio : Float
-    creado : String
-}
-
 input ProductoInput {
     nombre : String!
     existencia : Int!
     precio : Float!
 }
+
+# mutations
 
 type Mutation {
     # Usuarios

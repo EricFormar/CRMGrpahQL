@@ -16,11 +16,17 @@ const resolvers = {
 
     Query : {
         obtenerUsuario : async(_,{token}) => {
-
             const usuarioId = await jwt.verify(token, process.env.JWT_SECRET);
-
             return usuarioId
+        },
+        obtenerProductos : async () => {
 
+            try {
+                const productos = await Producto.find({})
+                return productos
+            } catch (error) {
+                console.log(error)
+            }
         }
     },
 
