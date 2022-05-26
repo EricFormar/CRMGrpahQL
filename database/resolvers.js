@@ -20,12 +20,25 @@ const resolvers = {
             return usuarioId
         },
         obtenerProductos : async () => {
-
             try {
-                const productos = await Producto.find({})
+                const productos = await Producto.find({});
                 return productos
             } catch (error) {
                 console.log(error)
+                return error
+            }
+        },
+        obtenerProducto : async (_,{id}) => {
+            try {
+                const producto = await Producto.findById(id);
+                console.log(producto)
+                if(!producto){
+                    throw new Error('Producto no encontrado')
+                }
+                return producto
+            } catch (error) {
+                console.log(error)
+                return error
             }
         }
     },

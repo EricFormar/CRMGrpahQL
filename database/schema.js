@@ -27,8 +27,13 @@ type Producto {
 # queries
 
 type Query {
+
+    # Usuarios
     obtenerUsuario(token : String!) : Usuario
+    
+    # Productos
     obtenerProductos : [Producto]
+    obtenerProducto(id : ID!) : Producto
 }
 
 # inputs
@@ -54,6 +59,7 @@ input ProductoInput {
 # mutations
 
 type Mutation {
+
     # Usuarios
     nuevoUsuario(input : UsuarioInput) : Usuario
     autenticarUsuario(input : AutenticarInput) : Token
