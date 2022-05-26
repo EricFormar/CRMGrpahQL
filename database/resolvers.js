@@ -98,6 +98,24 @@ const resolvers = {
                 console.log(error)
             }
         },
+        actualizarProducto : async (_,{id,input}) => {
+
+            try {
+                let producto = await Producto.findById(id);
+
+                if(!producto){
+                    throw new Error('Producto no encontrado')
+                }
+                producto = await Producto.findByIdAndUpdate({_id: id}, input, {new : true});
+
+                return producto;
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        }
     }
 }
 

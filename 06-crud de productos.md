@@ -114,3 +114,71 @@ query obtenerProducto ($obtenerProductoId: ID!){
   }
 }
 ~~~
+## ACTUALIZAR un producto
+### Schema | Mutation
+- Agrego el *Mutation* **actualizarProducto**. 
+- Recibe tanto el id de type *ID* para buscar el producto, como el input de type *ProductoInput* que son los datos a actualizar.
+~~~
+    actualizarProducto(id: ID!, input : ProductoInput) : Producto
+~~~
+### Resolver | Mutation
+- Creo la función que recibe por parámetro un id, para que utilizando el método findById() de mongoDB busque un producto. En el caso de no encontrarlo arroja un error. Luego ejecuto el método findByIdAndUpdate() de mongoDB, el cual recibe los siguientes parámetros:
+    - Un objeto que contiene el nombre del campo _id cuyo valor coincida con el id que se recibe por parámetro
+    - El input, que es la información a actualizar
+    - Un objeto que indica que luego devuelva el producto actualizado {new: true}
+~~~
+  actualizarProducto : async (_,{id,input}) => {
+
+            try {
+                let producto = await Producto.findById(id);
+
+                if(!producto){
+                    throw new Error('Producto no encontrado')
+                }
+                producto = await Producto.findByIdAndUpdate({_id: id}, input, {new : true});
+
+                return producto;
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        }
+~~~
+### Ejecución | Operation
+- Si el ID está seteado como obligatorio, también aquí lo debo señalar como tal.
+- Recibo por input los campos seteados en ProductoInput
+- Devuelve todos o algunos de los campos considerados en el type Producto
+~~~
+mutation ActualizarProducto($actualizarProductoId: ID!,$input : ProductoInput) {
+  actualizarProducto(id: $actualizarProductoId, input : $input) {
+    nombre
+    precio
+    existencia  
+  }
+}
+~~~
+
+### Ejecución | Variables
+- Paso los valores: el id del producto, y los datos que van por input (todos obligatorios)
+{
+  "actualizarProductoId": "628ec58ca23083ce97991c45",
+  "input" : {
+    "nombre" : "Televisor Philips 43'",
+    "precio": 40000,
+    "existencia": 120
+  }
+}
+### Ejecución | Response
+~~~
+{
+  "data": {
+    "actualizarProducto": {
+      "nombre": "Televisor Philips 43'",
+      "precio": 40000,
+      "existencia": 120
+    }
+  }
+}
+~~~
