@@ -1,6 +1,8 @@
 const bcrcyptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
+const Producto = require('../models/Producto');
+
 
 const crearToken = (usuario,secreta,expiresIn) => {
     
@@ -23,10 +25,10 @@ const resolvers = {
     },
 
     Mutation : {
+        //usuarios
         nuevoUsuario : async (_,{input}) => {
             
             const {email, password} = input;
-
             const existeUsuario = await Usuario.findOne({email});
             
             if(existeUsuario) {
@@ -48,7 +50,6 @@ const resolvers = {
         autenticarUsuario : async (_,{input}) => {
             
             const {email, password} = input;
-
             const usuario = await Usuario.findOne({email});
             
             if(!usuario) {
@@ -65,7 +66,19 @@ const resolvers = {
                 token : crearToken(usuario,process.env.JWT_SECRET,'24h')
             }
 
-        }
+        },
+        //productos
+        nuevoProducto : async (_,{input}) => {
+            
+            try {
+                const producto  = new Producto(input);
+                producto.save();
+
+                return producto
+            } catch (error) {
+                console.log(error)
+            }
+        },
     }
 }
 

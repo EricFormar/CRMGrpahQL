@@ -30,9 +30,29 @@ type Query {
     obtenerUsuario(token : String!) : Usuario
 }
 
+#Productos
+
+type Producto {
+    id: ID
+    nombre : String
+    existencia : Int
+    precio : Float
+    creado : String
+}
+
+input ProductoInput {
+    nombre : String!
+    existencia : Int!
+    precio : Float!
+}
+
 type Mutation {
+    # Usuarios
     nuevoUsuario(input : UsuarioInput) : Usuario
     autenticarUsuario(input : AutenticarInput) : Token
+
+    # Productos
+    nuevoProducto(input : ProductoInput) : Producto
 }
 
 `
