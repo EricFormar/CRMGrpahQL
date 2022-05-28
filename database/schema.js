@@ -24,6 +24,16 @@ type Producto {
     creado : String
 }
 
+type Cliente {
+    id : ID
+    nombre : String
+    apellido : String
+    empresa : String
+    email : String
+    telefono : String
+    vendedor : ID
+}
+
 # queries
 
 type Query {
@@ -56,6 +66,14 @@ input ProductoInput {
     precio : Float!
 }
 
+input ClienteInput {
+    nombre : String!
+    apellido : String!
+    email : String!
+    empresa : String!
+    telefono : String
+}
+
 # mutations
 
 type Mutation {
@@ -68,6 +86,9 @@ type Mutation {
     nuevoProducto(input : ProductoInput) : Producto
     actualizarProducto(id: ID!, input : ProductoInput) : Producto
     eliminarProducto(id : ID!) : String
+
+    # Clientes
+    nuevoCliente(input : ClienteInput) : Cliente
 }
 
 `

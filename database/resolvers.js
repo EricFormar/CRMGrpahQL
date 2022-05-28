@@ -2,7 +2,7 @@ const bcrcyptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
 const Producto = require('../models/Producto');
-
+const Cliente = require('../models/Cliente');
 
 const crearToken = (usuario,secreta,expiresIn) => {
     
@@ -44,7 +44,7 @@ const resolvers = {
     },
 
     Mutation : {
-        //usuarios
+        /* USUARIOS */
         nuevoUsuario : async (_,{input}) => {
             
             const {email, password} = input;
@@ -86,7 +86,7 @@ const resolvers = {
             }
 
         },
-        //productos
+        /* PRODUCTOS */
         nuevoProducto : async (_,{input}) => {
             
             try {
@@ -133,6 +133,27 @@ const resolvers = {
                 return error
             }
 
+        },
+        /* CLIENTES */
+        nuevoCliente : async (_,{input},ctx) => {
+            const {email} = input;
+            const cliente = await Cliente.findOne({email});
+            
+            if(cliente) {
+                throw new Error('El cliente ya está registrado')
+            };
+
+            try {
+                const cliente  = new Cliente(input);
+                cliente.vendedor = ctx.usuario.id;
+
+                cliente.save();
+
+                return cliente
+            } catch (error) {
+                console.log(error)
+                return error
+            }
         }
     }
 }
