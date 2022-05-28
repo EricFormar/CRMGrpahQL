@@ -40,7 +40,30 @@ const resolvers = {
                 console.log(error)
                 return error
             }
-        }
+        },
+
+        /* CLIENTES */
+        obtenerClientes : async () => {
+            try {
+                const clientes = await Cliente.find({});
+                return clientes
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+        },
+        obtenerCliente : async (_,{id}) => {
+            try {
+                const cliente = await Cliente.findById(id);
+                if(!cliente){
+                    throw new Error('Cliente no encontrado')
+                }
+                return cliente
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+        },
     },
 
     Mutation : {

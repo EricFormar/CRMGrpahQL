@@ -69,6 +69,15 @@ input ClienteInput {
 ~~~
      nuevoCliente(input : ClienteInput) : Cliente
 ~~~
+### Queries
+#### Obtener TODOS los clientes
+~~~
+ obtenerClientes : [Cliente]
+~~~
+#### Obtener UN cliente
+~~~
+obtenerCliente(id : ID!) : Cliente
+~~~
 ## Resolvers
 ### Nuevo Producto
 ~~~
@@ -117,6 +126,17 @@ const server = new ApolloServer({
     }
 });
 ~~~
+### Obtener TODOS los clientes
+~~~
+query obtenerClientes{
+  obtenerClientes {
+    nombre
+    apellido
+    empresa
+    vendedor
+  }
+}
+~~~
 ## Ejecutando en la plataforma de Apollo
 ### Nuevo Cliente
 #### Operation
@@ -156,6 +176,70 @@ mutation NuevoCliente ($input : ClienteInput){
       "id": "6291d992181bf8810bcf01cb",
       "nombre": "Américo",
       "apellido": "Muñoz",
+      "vendedor": "628e1c92eef318c04abb9645"
+    }
+  }
+}
+~~~
+### Obtener TODOS los clientes
+#### Operation
+~~~
+query obtenerClientes{
+  obtenerClientes {
+    nombre
+    apellido
+    empresa
+    vendedor
+  }
+}
+~~~
+#### Response
+~~~
+{
+  "data": {
+    "obtenerClientes": [
+      {
+        "nombre": "Paolo",
+        "apellido": "Rocca",
+        "empresa": "Grupo Techint",
+        "vendedor": "628e1c92eef318c04abb9645"
+      },
+      {
+        "nombre": "Américo",
+        "apellido": "Muñoz",
+        "empresa": "Epuyen S.A.",
+        "vendedor": "628e1c92eef318c04abb9645"
+      }
+    ]
+  }
+}
+~~~
+### Obtener UN cliente
+#### Operation
+~~~
+query obtenerCliente($input : ID!){
+  obtenerCliente(id : $input) {
+    nombre
+    apellido
+    empresa
+    vendedor
+  }
+}
+~~~
+#### Variables
+~~~
+{
+  "input" :   "629113c099a04e8f6b23673d"
+}
+~~~
+#### Response
+~~~
+{
+  "data": {
+    "obtenerCliente": {
+      "nombre": "Paolo",
+      "apellido": "Rocca",
+      "empresa": "Grupo Techint",
       "vendedor": "628e1c92eef318c04abb9645"
     }
   }

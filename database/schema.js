@@ -44,6 +44,10 @@ type Query {
     # Productos
     obtenerProductos : [Producto]
     obtenerProducto(id : ID!) : Producto
+
+    #Clientes
+    obtenerClientes : [Cliente]
+    obtenerCliente(id : ID!) : Cliente
 }
 
 # inputs
