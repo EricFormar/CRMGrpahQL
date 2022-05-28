@@ -43,20 +43,23 @@ const resolvers = {
         },
 
         /* CLIENTES */
-        obtenerClientes : async () => {
+        obtenerClientes : async (_,{},ctx) => {
             try {
-                const clientes = await Cliente.find({});
+                const clientes = await Cliente.find({vendedor: ctx.usuario.id.toString()});
                 return clientes
             } catch (error) {
                 console.log(error)
                 return error
             }
         },
-        obtenerCliente : async (_,{id}) => {
+        obtenerCliente : async (_,{id},ctx) => {
             try {
                 const cliente = await Cliente.findById(id);
                 if(!cliente){
                     throw new Error('Cliente no encontrado')
+                }
+                if(cliente.vendedor.toString() !== ctx.usuario.id){
+                    throw new Error('No tienes las credenciales')
                 }
                 return cliente
             } catch (error) {
@@ -178,7 +181,7 @@ const resolvers = {
                 return error
             }
         },
-        actualizarCliente : async (_,{id,input}) => {
+        actualizarCliente : async (_,{id,input},ctx) => {
 
             try {
                 let cliente = await Cliente.findById(id);
@@ -186,6 +189,11 @@ const resolvers = {
                 if(!cliente){
                     throw new Error('cliente no encontrado')
                 }
+
+                if(cliente.vendedor.toString() !== ctx.usuario.id){
+                    throw new Error('No tienes las credenciales')
+                }
+                
                 cliente = await Cliente.findByIdAndUpdate({_id: id}, input, {new : true});
 
                 return cliente;
