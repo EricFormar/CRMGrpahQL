@@ -65,9 +65,17 @@ input ClienteInput {
 }
 ~~~
 ### Mutations
-#### Nuevo Producto
+#### Nuevo Cliente
 ~~~
      nuevoCliente(input : ClienteInput) : Cliente
+~~~
+#### Actualizar un Cliente 
+~~~
+    actualizarCliente(id: ID!, input : ClienteInput) : Cliente
+~~~
+#### Eliminar un Cliente
+~~~
+    eliminarCliente(id : ID!) : String
 ~~~
 ### Queries
 #### Obtener TODOS los clientes
@@ -79,7 +87,8 @@ input ClienteInput {
 obtenerCliente(id : ID!) : Cliente
 ~~~
 ## Resolvers
-### Nuevo Producto
+### Mutations
+#### Nuevo Cliente
 ~~~
 nuevoCliente : async (_,{input},ctx) => {
         const {email} = input;
@@ -126,7 +135,50 @@ const server = new ApolloServer({
     }
 });
 ~~~
-### Obtener TODOS los clientes
+#### Actualizar Cliente
+~~~
+ actualizarCliente : async (_,{id,input}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('cliente no encontrado')
+                }
+                cliente = await Cliente.findByIdAndUpdate({_id: id}, input, {new : true});
+
+                return cliente;
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
+~~~
+#### Eliminar Cliente
+~~~
+ eliminarCliente : async (_,{id}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('Cliente no encontrado')
+                }
+                await Cliente.findByIdAndDelete({_id: id});
+
+                return "El cliente fue eliminado con éxito!"
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
+~~~
+### Queries
+#### Obtener TODOS los clientes
 ~~~
 query obtenerClientes{
   obtenerClientes {
@@ -136,6 +188,21 @@ query obtenerClientes{
     vendedor
   }
 }
+~~~
+#### Obtener UN los cliente
+~~~
+  obtenerCliente : async (_,{id}) => {
+            try {
+                const cliente = await Cliente.findById(id);
+                if(!cliente){
+                    throw new Error('Cliente no encontrado')
+                }
+                return cliente
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+        },
 ~~~
 ## Ejecutando en la plataforma de Apollo
 ### Nuevo Cliente
@@ -242,6 +309,113 @@ query obtenerCliente($input : ID!){
       "empresa": "Grupo Techint",
       "vendedor": "628e1c92eef318c04abb9645"
     }
+  }
+}
+~~~
+### ACTUALIZAR un cliente
+### Schema | Mutation
+~~~
+    actualizarProducto(id: ID!, input : ProductoInput) : Producto
+~~~
+### Resolver | Mutation
+~~~
+    actualizarCliente : async (_,{id,input}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('cliente no encontrado')
+                }
+                cliente = await Cliente.findByIdAndUpdate({_id: id}, input, {new : true});
+
+                return cliente;
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
+~~~
+### Ejecución | Operation
+~~~
+mutation ActualizarCliente($actualizarClienteId: ID!, $input : ClienteInput) {
+  actualizarCliente(id: $actualizarClienteId, input : $input) {
+    nombre
+    apellido
+    empresa
+  }
+}
+~~~
+### Ejecución | Variables
+~~~
+{
+  "actualizarClienteId": "629113c099a04e8f6b23673d",
+  "input": {
+    "nombre" : "Pablo",
+    "apellido": "Rocca",
+    "empresa": "Techint",
+    "email": "techint@gmail.com"
+
+  }
+}
+~~~
+### Ejecución | Response
+~~~
+{
+  "data": {
+    "actualizarCliente": {
+      "nombre": "Pablo",
+      "apellido": "Rocca",
+      "empresa": "Techint"
+    }
+  }
+}
+~~~
+## ELIMINAR un cliente
+### Schema | Mutation
+~~~
+    eliminarCliente(id : ID!) : String
+~~~
+### Resolver | Mutation
+~~~
+    eliminarCliente : async (_,{id}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('Cliente no encontrado')
+                }
+                await Cliente.findByIdAndDelete({_id: id});
+
+                return "El cliente fue eliminado con éxito!"
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
+~~~
+### Ejecución | Operation
+~~~
+mutation EliminarCliente($eliminarClienteId: ID!) {
+  eliminarCliente(id: $eliminarClienteId)
+}
+~~~
+### Ejecución | Variables
+~~~
+{
+  "eliminarClienteId": "629113c099a04e8f6b23673d"
+}
+~~~
+### Ejecución | Response
+~~~
+{
+  "data": {
+    "eliminarCliente": "El cliente fue eliminado con éxito!"
   }
 }
 ~~~

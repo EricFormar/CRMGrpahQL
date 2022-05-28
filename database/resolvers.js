@@ -177,7 +177,43 @@ const resolvers = {
                 console.log(error)
                 return error
             }
-        }
+        },
+        actualizarCliente : async (_,{id,input}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('cliente no encontrado')
+                }
+                cliente = await Cliente.findByIdAndUpdate({_id: id}, input, {new : true});
+
+                return cliente;
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
+        eliminarCliente : async (_,{id}) => {
+
+            try {
+                let cliente = await Cliente.findById(id);
+
+                if(!cliente){
+                    throw new Error('Cliente no encontrado')
+                }
+                await Cliente.findByIdAndDelete({_id: id});
+
+                return "El cliente fue eliminado con éxito!"
+
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
+        },
     }
 }
 
